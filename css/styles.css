@@ -1,0 +1,25 @@
+html {
+    box-sizing: border-box;
+    font-size: 50%;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+}
+
+/* GENERAL STYLES */
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
