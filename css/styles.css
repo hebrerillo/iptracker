@@ -45,7 +45,7 @@ body {
 .input-address-container input {
     font-size: 18px;
     padding: 1.6rem 2.5rem;
-    border-radius: 10px;
+    border-radius: 15px;
     outline: none;
     border: none;
 }
