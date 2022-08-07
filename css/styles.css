@@ -1,3 +1,9 @@
+:root {
+    --text-color-white: #fff;
+    --dark-grey: hsl(0, 0%, 59%);
+    --very-dark-grey: hsl(0, 0%, 17%);
+}
+
 html {
     box-sizing: border-box;
     font-size: 50%;
@@ -13,13 +19,25 @@ body {
     font-family: 'Rubik', sans-serif;
 }
 
-/* GENERAL STYLES */
+/*** HEADER ***/
 
-ul {
-    list-style: none;
+.main-header
+{
+    text-align: center;
+    background-image: url('../images/pattern-bg.png');
+    background-size: cover;
+    padding-top: 2rem;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+.main-header h1 {
+    font-size: 3rem;
+    color: var(--text-color-white);
+    margin-bottom: 3rem;
+    font-weight: 500;
+}
+
+.form-tracker {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
 }
