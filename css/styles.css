@@ -21,6 +21,12 @@ body {
     font-family: 'Rubik', sans-serif;
 }
 
+.main-container {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
 /*** HEADER ***/
 
 .main-header
