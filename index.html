@@ -30,7 +30,27 @@
                     <button class="form-submit-ip" type="submit"></button>
                 </form>
             </header>
-            <div id="map"></div>
+            <main class="map-container">
+                <div class="results-container">
+                    <div class="info-item">
+                        <h5>ip address</h5>
+                        <span>192.168.0.12</span>
+                    </div>
+                    <div class="info-item">
+                        <h5>Location</h5>
+                        <span>Brooklyn, NY 10001</span>
+                    </div>
+                    <div class="info-item">
+                        <h5>timezone</h5>
+                        <span>UTC - 5:00</span>
+                    </div>
+                    <div class="info-item">
+                        <h5>isp</h5>
+                        <span>spacex starlink</span>
+                    </div>
+                </div>
+                <div id="map" class="leafletMap"></div>
+            </main>
         </div>
     </body>
 </html>
