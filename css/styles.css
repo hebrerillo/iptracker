@@ -2,6 +2,8 @@
     --text-color-white: #fff;
     --dark-grey: hsl(0, 0%, 59%);
     --very-dark-grey: hsl(0, 0%, 17%);
+    --default-border-radius: 15px;
+    --input-address-height: 7rem;
 }
 
 html {
@@ -38,18 +40,38 @@ body {
 }
 
 .form-tracker {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2.5rem;
     width: 90%;
     margin: 0 auto;
+    position: relative;
 }
 
-.input-address-container input {
+.input-address {
     font-size: 18px;
-    padding: 1.6rem 2.5rem;
-    border-radius: 15px;
+    padding: 0 2.5rem;
+    border-radius: var(--default-border-radius);
     outline: none;
     border: none;
     width: 100%;
+    height: var(--input-address-height);
+}
+
+.form-submit-ip {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #000;
+    border: none;
+    /*With these two properties, the submit button is an exact square.*/
+    width: var(--input-address-height);
+    height: 100%;
+    /****/
+    border-top-right-radius: var(--default-border-radius);
+    border-bottom-right-radius: var(--default-border-radius);
+    cursor: pointer;
+}
+
+.form-submit-ip::before {
+    content: url('../images/icon-arrow.svg');
+    width: 11px;
+    height: 14px;
 }
