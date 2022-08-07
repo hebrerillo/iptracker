@@ -41,3 +41,11 @@ body {
     justify-content: center;
     margin-bottom: 2.5rem;
 }
+
+.input-address-container input {
+    font-size: 18px;
+    padding: 1.6rem 2.5rem;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+}
