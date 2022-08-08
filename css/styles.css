@@ -38,6 +38,7 @@ body {
     background-position: center;
     padding-top: 3rem;
     height: 37rem;
+    position: relative;
 }
 
 .main-header h1 {
@@ -50,7 +51,6 @@ body {
 .form-tracker {
     margin: 0 auto;
     position: relative;
-    max-width: 70rem;
 }
 .input-address-container {
     flex-grow: 1;
@@ -87,16 +87,6 @@ body {
     height: 14px;
 }
 
-/** MAP **/
-
-.map-container {
-    position: relative;
-}
-
-.leafletMap {
-    height: 100%;
-}
-
 .results-container {
     display: grid;
     row-gap: 3rem;
@@ -105,8 +95,8 @@ body {
     padding: 3rem 0;
     position: absolute;
     left: 50%;
-    top: 0;
-    transform: translate(-50%, -45%);
+    bottom: 0;
+    transform: translate(-50%, 55%);
     z-index:999;
     text-align: center;
     box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, .1);
@@ -136,6 +126,10 @@ body {
     .results-container {
         grid-template-columns: 1fr 1fr;
     }
+
+    .form-tracker {
+        max-width: 70rem;
+    }
 }
 
 
@@ -147,6 +141,12 @@ body {
 
     html {
         font-size: 62.5%;
+    }
+
+
+    .main-header
+    {
+        height: 30rem;
     }
 
     .results-container {
