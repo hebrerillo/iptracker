@@ -4,6 +4,7 @@ function IpTracker()
 {
     this.map = null; //The leaflet map.
     this.form = document.querySelector('.form-tracker');
+    this.errorMessageContainer = document.querySelector('.error-message');
     this.init();
 }
 
@@ -17,6 +18,7 @@ IpTracker.prototype.submitForm = async function(event){
     event.preventDefault();
     
     try {
+        this.hideErrorBox();
         let ipAddress = new FormData(this.form).get('ip-address');
         
         if (!this.checkValidIp(ipAddress))
@@ -32,10 +34,31 @@ IpTracker.prototype.submitForm = async function(event){
     }
     catch(error)
     {
-        console.error("Error sending form", error);
+        this.showErrorBox(error);
     }
     
 };
+
+/**
+ * Shows the error string passed as a parameter.
+ * 
+ * @param {type} error
+ */
+IpTracker.prototype.showErrorBox = function(error)
+{
+    this.errorMessageContainer.querySelector('.error-message-text').textContent = error;
+    this.errorMessageContainer.classList.add('display-error');
+};
+
+/**
+ * Hides the error message box.
+ * 
+ */
+IpTracker.prototype.hideErrorBox = function()
+{
+    this.errorMessageContainer.classList.remove('display-error');
+};
+
 
 /**
  * Checks if the parameter 'ipAddress' is a valid IP address.

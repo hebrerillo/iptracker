@@ -30,27 +30,33 @@
                     <button class="submit-form" type="submit"></button>
                 </form>
 
-                <div class="ipaddress-info">
-                    <div class="info-item">
-                        <h5>ip address</h5>
-                        <span>192.168.0.12</span>
+                <div class="results-container">
+                    <div class="ipaddress-info">
+                        <div class="info-item">
+                            <h5>ip address</h5>
+                            <span>192.168.0.12</span>
+                        </div>
+                        <div class="info-item">
+                            <h5>Location</h5>
+                            <span>Brooklyn, NY 10001</span>
+                        </div>
+                        <div class="info-item">
+                            <h5>timezone</h5>
+                            <span>UTC - 5:00</span>
+                        </div>
+                        <div class="info-item">
+                            <h5>isp</h5>
+                            <span>spacex starlink</span>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <h5>Location</h5>
-                        <span>Brooklyn, NY 10001</span>
-                    </div>
-                    <div class="info-item">
-                        <h5>timezone</h5>
-                        <span>UTC - 5:00</span>
-                    </div>
-                    <div class="info-item">
-                        <h5>isp</h5>
-                        <span>spacex starlink</span>
+                    
+                    <div class="error-message">
+                        <p class="error-face">&#128546;</p>
+                        <p class="error-message-text">IP address is invalid!</p>
                     </div>
                 </div>
-
             </header>
-            <div id="map" class="leafletMap"></div>
+            <div id="map"></div>
         </div>
     </body>
 </html>
