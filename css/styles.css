@@ -87,7 +87,7 @@ body {
     height: 14px;
 }
 
-.results-container {
+.ipaddress-info {
     display: grid;
     row-gap: 3rem;
     background-color: #fff;
@@ -117,13 +117,13 @@ body {
 }
 
 /* SHARED STYLES */
-.results-container, .form-tracker {
+.ipaddress-info, .form-tracker {
     width: 90%;
 }
 
 @media screen and (min-width: 500px) {
 
-    .results-container {
+    .ipaddress-info {
         grid-template-columns: 1fr 1fr;
     }
 
@@ -149,7 +149,7 @@ body {
         height: 30rem;
     }
 
-    .results-container {
+    .ipaddress-info {
         grid-template-columns: repeat(4, 1fr);
         align-items: stretch;
         justify-items: center;
