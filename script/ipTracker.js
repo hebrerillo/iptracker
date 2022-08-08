@@ -3,13 +3,56 @@ import {API_KEY} from './config.js';
 function IpTracker()
 {
     this.map = null; //The leaflet map.
+    this.form = document.querySelector('.form-tracker');
     this.init();
-    
 }
 
 IpTracker.prototype.init = function ()
 {
     this.initMap();
+    this.form.addEventListener('submit', this.submitForm.bind(this));
+};
+
+IpTracker.prototype.submitForm = async function(event){
+    event.preventDefault();
+    
+    try {
+        let ipAddress = new FormData(this.form).get('ip-address');
+        
+        if (!this.checkValidIp(ipAddress))
+        {
+            throw new Error("Invalid IP");
+        }
+        else
+        {
+            console.log("Valid ip!");
+        }
+        
+        console.log(ipAddress);
+    }
+    catch(error)
+    {
+        console.error("Error sending form", error);
+    }
+    
+};
+
+/**
+ * Checks if the parameter 'ipAddress' is a valid IP address.
+ * 
+ * @param {String} ipAddress The IP address to check.
+ * @return true if the string 'ipAddress' is a valid string, false otherwise.
+ * @note Credits: https://www.w3resource.com/javascript/form/ip-address-validation.php
+ */
+IpTracker.prototype.checkValidIp = function(ipAddress)
+{
+    var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if(ipAddress.match(ipformat))
+    {
+        return true;
+    }
+
+    return false;
 };
 
 /**
