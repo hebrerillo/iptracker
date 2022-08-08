@@ -66,7 +66,7 @@ body {
     height: var(--input-address-height);
 }
 
-.form-submit-ip {
+.submit-form {
     position: absolute;
     right: 0;
     top: 0;
@@ -81,7 +81,7 @@ body {
     cursor: pointer;
 }
 
-.form-submit-ip::before {
+.submit-form::before {
     content: url('../images/icon-arrow.svg');
     width: 11px;
     height: 14px;
