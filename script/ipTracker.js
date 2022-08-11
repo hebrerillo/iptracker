@@ -136,7 +136,7 @@ IpTracker.prototype.showIPMapLocation = function (lat_long_array)
 {
     if (this.map === null)
     {
-        this.map = L.map('map');
+        this.map = L.map('map', { zoomControl: false });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
 
         this.marker = L.marker(lat_long_array, {icon: L.icon({
