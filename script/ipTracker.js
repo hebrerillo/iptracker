@@ -125,13 +125,17 @@ IpTracker.prototype.showIPMapLocation = function (lat_long_array)
     {
         this.map = L.map('map');
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-        this.marker = L.marker(lat_long_array).addTo(this.map);
+
+        this.marker = L.marker(lat_long_array, {icon: L.icon({
+                iconUrl: './images/icon-location.svg',
+                iconSize: [46, 56]
+            })}).addTo(this.map);
     }
-    else 
+    else
     {
         this.marker.setLatLng(lat_long_array);
     }
-    
+
     this.map.setView(lat_long_array, MAP_ZOOM);
 };
 
