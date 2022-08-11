@@ -1,4 +1,5 @@
 import {API_KEY} from './config.js';
+import {GEOIPFY_URI} from './config.js';
 
 function IpTracker()
 {
@@ -18,43 +19,75 @@ IpTracker.prototype.init = function ()
 /**
  * Shows the spinner loader.
  */
-IpTracker.prototype.showSpinner = function() {
+IpTracker.prototype.showSpinner = function ()
+{
     this.spinnerLoader.classList.add('show-loader');
 };
 
 /**
  * Hides the spinner loader.
  */
-IpTracker.prototype.hideSpinner = function() {
+IpTracker.prototype.hideSpinner = function ()
+{
     this.spinnerLoader.classList.remove('show-loader');
 };
+
+/**
+ * Performs the request to the remote server
+ * 
+ * @return the response from the server
+ */
+IpTracker.prototype.performRequest = async function ()
+{
+    try
+    {
+        return await fetch(GEOIPFY_URI);
+    }
+    catch (Error)
+    {
+        throw "Could not connect to the server";
+    }
+};
+
 
 /**
  * Submits the form with the IP to track.
  * 
  * @param {type} event
  */
-IpTracker.prototype.submitForm = async function(event){
+IpTracker.prototype.submitForm = async function (event)
+{
     event.preventDefault();
-    
-    try {
-        this.hideErrorBox();
+
+    try
+    {
         this.showSpinner();
         let ipAddress = new FormData(this.form).get('ip-address');
-        
+
         if (!this.checkValidIp(ipAddress))
         {
-            throw new Error("Invalid IP");
+            throw "Invalid IP";
         }
-        
-        this.hideSpinner();
+
+        let result = await this.performRequest();
+
+
+        if (result.status !== 200)
+        {
+            throw "Server returned an error.";
+        }
+
+        this.hideErrorBox();
     }
-    catch(error)
+    catch (error)
     {
-        this.hideSpinner();
         this.showErrorBox(error);
     }
-    
+    finally
+    {
+        this.hideSpinner();
+    }
+
 };
 
 /**
@@ -62,7 +95,7 @@ IpTracker.prototype.submitForm = async function(event){
  * 
  * @param {type} error
  */
-IpTracker.prototype.showErrorBox = function(error)
+IpTracker.prototype.showErrorBox = function (error)
 {
     this.errorMessageContainer.querySelector('.error-message-text').textContent = error;
     this.errorMessageContainer.classList.add('display-error');
@@ -72,7 +105,7 @@ IpTracker.prototype.showErrorBox = function(error)
  * Hides the error message box.
  * 
  */
-IpTracker.prototype.hideErrorBox = function()
+IpTracker.prototype.hideErrorBox = function ()
 {
     this.errorMessageContainer.classList.remove('display-error');
 };
@@ -85,10 +118,10 @@ IpTracker.prototype.hideErrorBox = function()
  * @return true if the string 'ipAddress' is a valid string, false otherwise.
  * @note Credits: https://www.w3resource.com/javascript/form/ip-address-validation.php
  */
-IpTracker.prototype.checkValidIp = function(ipAddress)
+IpTracker.prototype.checkValidIp = function (ipAddress)
 {
     var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if(ipAddress.match(ipformat))
+    if (ipAddress.match(ipformat))
     {
         return true;
     }
@@ -101,7 +134,7 @@ IpTracker.prototype.checkValidIp = function(ipAddress)
  */
 IpTracker.prototype.initMap = function ()
 {
-    this.map = L.map('map').setView([39.4640585,-3.5306775], 13);
+    this.map = L.map('map').setView([39.4640585, -3.5306775], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.fr/hot/copyright">OpenStreetMap</a> contributors'
