@@ -1,9 +1,11 @@
 import {API_KEY} from './config.js';
 import {GEOIPFY_URI} from './config.js';
+import {MAP_ZOOM} from './config.js';
 
 function IpTracker()
 {
     this.map = null; //The leaflet map.
+    this.marker = null; //The marker
     this.form = document.querySelector('.form-tracker');
     this.errorMessageContainer = document.querySelector('.error-message');
     this.spinnerLoader = document.querySelector('.loader-container');
@@ -13,7 +15,6 @@ function IpTracker()
 
 IpTracker.prototype.init = function ()
 {
-    this.initMap();
     this.form.addEventListener('submit', this.submitForm.bind(this));
     this.checkIPAndPerformRequest();
 };
@@ -76,6 +77,7 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
         const jsonResult = await result.json();
 
         this.showIPInformation(jsonResult);
+        this.showIPMapLocation([jsonResult.location.lat, jsonResult.location.lng]);
         this.hideErrorBox();
     }
     catch (error)
@@ -85,9 +87,8 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
     finally
     {
         this.hideSpinner();
-    }
+}
 };
-
 
 /**
  * Submits the form with the IP to track.
@@ -111,6 +112,27 @@ IpTracker.prototype.showIPInformation = function (jsonInfo)
             + jsonInfo.location.region + " " + jsonInfo.location.postalCode;
     this.boxIPresult.querySelector('[data-timezone-info]').textContent = jsonInfo.location.timezone;
     this.boxIPresult.querySelector('[data-isp-info]').textContent = jsonInfo.isp;
+};
+
+/**
+ * Shows the latitude and longitude of the tracked IP address.
+ * 
+ * @param {Array} lat_long_array An array with the latitude and longitude, in the form [lat, lng]
+ */
+IpTracker.prototype.showIPMapLocation = function (lat_long_array)
+{
+    if (this.map === null)
+    {
+        this.map = L.map('map');
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
+        this.marker = L.marker(lat_long_array).addTo(this.map);
+    }
+    else 
+    {
+        this.marker.setLatLng(lat_long_array);
+    }
+    
+    this.map.setView(lat_long_array, MAP_ZOOM);
 };
 
 /**
@@ -151,18 +173,5 @@ IpTracker.prototype.checkValidIp = function (ipAddress)
 
     return false;
 };
-
-/**
- * Initialises the Leaflet map;
- */
-IpTracker.prototype.initMap = function ()
-{
-    this.map = L.map('map').setView([39.4640585, -3.5306775], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.fr/hot/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
-};
-
 
 let appTracker = new IpTracker();
