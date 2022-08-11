@@ -74,8 +74,8 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
         }
 
         const jsonResult = await result.json();
-        this.showIPInformation(jsonResult);
 
+        this.showIPInformation(jsonResult);
         this.hideErrorBox();
     }
     catch (error)
