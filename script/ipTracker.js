@@ -106,6 +106,7 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
         this.showIPInformation(jsonResult);
         this.showIPMapLocation([jsonResult.location.lat, jsonResult.location.lng]);
         this.hideErrorBox();
+        this.cleanForm();
     }
     catch (error)
     {
@@ -187,6 +188,15 @@ IpTracker.prototype.showErrorBox = function (error)
 IpTracker.prototype.hideErrorBox = function ()
 {
     this.errorMessageContainer.classList.remove('display-error');
+};
+
+/**
+ * Clean all the fields of the form.
+ * 
+ */
+IpTracker.prototype.cleanForm = function ()
+{
+    this.form.querySelectorAll('input').forEach(inputField => inputField.value = '');
 };
 
 /**
