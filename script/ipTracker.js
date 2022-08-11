@@ -7,6 +7,7 @@ function IpTracker()
     this.form = document.querySelector('.form-tracker');
     this.errorMessageContainer = document.querySelector('.error-message');
     this.spinnerLoader = document.querySelector('.loader-container');
+    this.boxIPresult = document.querySelector('.ipaddress-info');
     this.init();
 }
 
@@ -69,12 +70,13 @@ IpTracker.prototype.submitForm = async function (event)
         }
 
         let result = await this.performRequest();
-
-
         if (result.status !== 200)
         {
             throw "Server returned an error.";
         }
+        
+        const jsonResult = await result.json();
+        this.showIPInformation(jsonResult);
 
         this.hideErrorBox();
     }
@@ -86,7 +88,19 @@ IpTracker.prototype.submitForm = async function (event)
     {
         this.hideSpinner();
     }
+};
 
+/**
+ * 
+ * @param {Object} jsonInfo The object with all the information about an IP address.
+ */
+IpTracker.prototype.showIPInformation = function(jsonInfo)
+{
+    this.boxIPresult.querySelector('[data-ip-info]').textContent = jsonInfo.ip;
+    this.boxIPresult.querySelector('[data-location-info]').textContent = jsonInfo.location.city + ", " 
+            + jsonInfo.location.region + " " + jsonInfo.location.postalCode;
+    this.boxIPresult.querySelector('[data-timezone-info]').textContent = jsonInfo.location.timezone;
+    this.boxIPresult.querySelector('[data-isp-info]').textContent = jsonInfo.isp;
 };
 
 /**
