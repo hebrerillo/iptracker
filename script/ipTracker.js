@@ -39,18 +39,19 @@ IpTracker.prototype.hideSpinner = function ()
  * Performs the request to the remote server
  * 
  * @param {String} ipAddress The IP address to get the information from. 
+ * @param {String} domain The domain to get the information from. 
  * @return the response from the server
  */
-IpTracker.prototype.performRequest = async function (ipAddress = '')
+IpTracker.prototype.performRequest = async function (ipAddress = '', domain = '')
 {
     try
     {
-        return await fetch(GEOIPFY_URI + '?apiKey=' + API_KEY + '&ipAddress=' + ipAddress);
+        return await fetch(GEOIPFY_URI + '?apiKey=' + API_KEY + '&ipAddress=' + ipAddress + '&domain=' + domain);
     }
     catch (Error)
     {
         throw "Could not connect to the server";
-}
+    }
 };
 
 /**
@@ -73,12 +74,28 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
     {
         this.showSpinner();
         this.clearInformationBox();
-        if (ipAddress.length > 0 && !this.checkValidIp(ipAddress))
+        let result = null;
+
+        if (ipAddress.length > 0)
         {
-            throw "Invalid IP";
+            if (this.checkValidIp(ipAddress))
+            {
+                result = await this.performRequest(ipAddress);
+            }
+            else if (this.checkValidDomain(ipAddress))
+            {
+                result = await this.performRequest('', ipAddress);
+            }
+            else
+            {
+                throw "Invalid IP or domain";
+            }
+        }
+        else
+        {
+            result = await this.performRequest(); //This will get the client IP address
         }
 
-        let result = await this.performRequest(ipAddress);
         if (result.status !== 200)
         {
             throw "Server returned an error.";
@@ -97,7 +114,7 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
     finally
     {
         this.hideSpinner();
-}
+    }
 };
 
 /**
@@ -136,7 +153,7 @@ IpTracker.prototype.showIPMapLocation = function (lat_long_array)
 {
     if (this.map === null)
     {
-        this.map = L.map('map', { zoomControl: false });
+        this.map = L.map('map', {zoomControl: false});
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
 
         this.marker = L.marker(lat_long_array, {icon: L.icon({
@@ -172,6 +189,25 @@ IpTracker.prototype.hideErrorBox = function ()
     this.errorMessageContainer.classList.remove('display-error');
 };
 
+/**
+ * Checks if the parameter 'domain' is a valid domain.
+ * 
+ * @param {String} domain The domain to check.
+ * @return true if the string 'domain' is a valid domain, false otherwise.
+ * @note Credits: https://www.w3resource.com/javascript-exercises/javascript-regexp-exercise-18.php
+ */
+IpTracker.prototype.checkValidDomain = function (domain)
+{
+
+    const domainRegexp = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$/i;
+
+    if (domainRegexp.test(domain))
+    {
+        return true;
+    }
+
+    return false;
+};
 
 /**
  * Checks if the parameter 'ipAddress' is a valid IP address.
@@ -182,7 +218,7 @@ IpTracker.prototype.hideErrorBox = function ()
  */
 IpTracker.prototype.checkValidIp = function (ipAddress)
 {
-    var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    const ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (ipAddress.match(ipformat))
     {
         return true;
