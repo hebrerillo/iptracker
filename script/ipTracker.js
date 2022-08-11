@@ -49,7 +49,6 @@ IpTracker.prototype.performRequest = async function ()
     }
 };
 
-
 /**
  * Submits the form with the IP to track.
  * 
