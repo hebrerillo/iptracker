@@ -150,7 +150,6 @@ body {
     font-size: 2.5rem;
 }
 
-
 .info-item h5 {
     text-transform: uppercase;
     color: var(--dark-grey);
@@ -163,11 +162,29 @@ body {
     font-weight: 500;
     display: block;
     font-size: 2.3rem;
+    opacity: 0;
+}
+
+.info-item span.data-info.textFadeIn {
+    animation-name: textFadeIn;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
 }
 
 /* SHARED STYLES */
 .results-container, .form-tracker {
     width: 90%;
+}
+
+@keyframes textFadeIn {
+    from {
+        transform: scale(0.8);
+    }
+    
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 @media screen and (min-width: 500px) {

@@ -54,6 +54,15 @@ IpTracker.prototype.performRequest = async function (ipAddress = '')
 };
 
 /**
+ * Deletes all the data currently displayed in the box with the information about the IP.
+ * 
+ */
+IpTracker.prototype.clearInformationBox = function ()
+{
+    this.boxIPresult.querySelectorAll('.data-info').forEach(dataItem => dataItem.classList.remove('textFadeIn'));
+};
+
+/**
  * Checks the validity of the IP passed as a parameter. If it is valid, then perform the request to track its information.
  * 
  * @param {type} ipAddress The IP address to get information from.
@@ -63,6 +72,7 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
     try
     {
         this.showSpinner();
+        this.clearInformationBox();
         if (ipAddress.length > 0 && !this.checkValidIp(ipAddress))
         {
             throw "Invalid IP";
@@ -102,6 +112,7 @@ IpTracker.prototype.submitForm = async function (event)
 };
 
 /**
+ * Fills some HTML elements with the information of an IP address. 
  * 
  * @param {Object} jsonInfo The object with all the information about an IP address.
  */
@@ -112,6 +123,8 @@ IpTracker.prototype.showIPInformation = function (jsonInfo)
             + jsonInfo.location.region + " " + jsonInfo.location.postalCode;
     this.boxIPresult.querySelector('[data-timezone-info]').textContent = jsonInfo.location.timezone;
     this.boxIPresult.querySelector('[data-isp-info]').textContent = jsonInfo.isp;
+
+    this.boxIPresult.querySelectorAll('.data-info').forEach(dataItem => dataItem.classList.add('textFadeIn'));
 };
 
 /**
