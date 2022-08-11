@@ -15,6 +15,7 @@ IpTracker.prototype.init = function ()
 {
     this.initMap();
     this.form.addEventListener('submit', this.submitForm.bind(this));
+    this.checkIPAndPerformRequest();
 };
 
 /**
@@ -36,45 +37,42 @@ IpTracker.prototype.hideSpinner = function ()
 /**
  * Performs the request to the remote server
  * 
+ * @param {String} ipAddress The IP address to get the information from. 
  * @return the response from the server
  */
-IpTracker.prototype.performRequest = async function ()
+IpTracker.prototype.performRequest = async function (ipAddress = '')
 {
     try
     {
-        return await fetch(GEOIPFY_URI);
+        return await fetch(GEOIPFY_URI + '?apiKey=' + API_KEY + '&ipAddress=' + ipAddress);
     }
     catch (Error)
     {
         throw "Could not connect to the server";
-    }
+}
 };
 
 /**
- * Submits the form with the IP to track.
+ * Checks the validity of the IP passed as a parameter. If it is valid, then perform the request to track its information.
  * 
- * @param {type} event
+ * @param {type} ipAddress The IP address to get information from.
  */
-IpTracker.prototype.submitForm = async function (event)
+IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
 {
-    event.preventDefault();
-
     try
     {
         this.showSpinner();
-        let ipAddress = new FormData(this.form).get('ip-address');
-
-        if (!this.checkValidIp(ipAddress))
+        if (ipAddress.lengh > 0 && !this.checkValidIp(ipAddress))
         {
             throw "Invalid IP";
         }
 
-        let result = await this.performRequest();
+        let result = await this.performRequest(ipAddress);
         if (result.status !== 200)
         {
             throw "Server returned an error.";
         }
-        
+
         const jsonResult = await result.json();
         this.showIPInformation(jsonResult);
 
@@ -90,14 +88,28 @@ IpTracker.prototype.submitForm = async function (event)
     }
 };
 
+
+/**
+ * Submits the form with the IP to track.
+ * 
+ * @param {type} event
+ */
+IpTracker.prototype.submitForm = async function (event)
+{
+    event.preventDefault();
+    await this.checkIPAndPerformRequest(new FormData(this.form).get('ip-address'));
+};
+
+
+
 /**
  * 
  * @param {Object} jsonInfo The object with all the information about an IP address.
  */
-IpTracker.prototype.showIPInformation = function(jsonInfo)
+IpTracker.prototype.showIPInformation = function (jsonInfo)
 {
     this.boxIPresult.querySelector('[data-ip-info]').textContent = jsonInfo.ip;
-    this.boxIPresult.querySelector('[data-location-info]').textContent = jsonInfo.location.city + ", " 
+    this.boxIPresult.querySelector('[data-location-info]').textContent = jsonInfo.location.city + ", "
             + jsonInfo.location.region + " " + jsonInfo.location.postalCode;
     this.boxIPresult.querySelector('[data-timezone-info]').textContent = jsonInfo.location.timezone;
     this.boxIPresult.querySelector('[data-isp-info]').textContent = jsonInfo.isp;
