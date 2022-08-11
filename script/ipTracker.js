@@ -62,7 +62,7 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
     try
     {
         this.showSpinner();
-        if (ipAddress.lengh > 0 && !this.checkValidIp(ipAddress))
+        if (ipAddress.length > 0 && !this.checkValidIp(ipAddress))
         {
             throw "Invalid IP";
         }
@@ -99,8 +99,6 @@ IpTracker.prototype.submitForm = async function (event)
     event.preventDefault();
     await this.checkIPAndPerformRequest(new FormData(this.form).get('ip-address'));
 };
-
-
 
 /**
  * 
