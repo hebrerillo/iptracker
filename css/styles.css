@@ -250,3 +250,11 @@ body {
     }
 
 }
+
+/* To see the map on smartphones when displayed on landscape */
+@media screen and (max-height: 650px)
+{
+    #map {
+        min-height: 400px;
+    }
+}
