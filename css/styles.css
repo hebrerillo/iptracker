@@ -83,6 +83,10 @@ body {
     height: var(--input-address-height);
 }
 
+.input-address::placeholder {
+    font-size: 1.7rem;
+}
+
 .submit-form {
     position: absolute;
     right: 0;
