@@ -1,6 +1,7 @@
 import {API_KEY} from './config.js';
 import {GEOIPFY_URI} from './config.js';
 import {MAP_ZOOM} from './config.js';
+import {DEFAULT_TIME_OUT_MS} from './config.js';
 
 function IpTracker()
 {
@@ -46,10 +47,22 @@ IpTracker.prototype.performRequest = async function (ipAddress = '', domain = ''
 {
     try
     {
-        return await fetch(GEOIPFY_URI + '?apiKey=' + API_KEY + '&ipAddress=' + ipAddress + '&domain=' + domain);
+        let abortController = new AbortController();
+        const timeoutIdFetch = setTimeout(() => abortController.abort(), DEFAULT_TIME_OUT_MS);
+
+        const response = await fetch(GEOIPFY_URI + '?apiKey=' + API_KEY + '&ipAddress=' + ipAddress + '&domain=' + domain
+                , {signal: abortController.signal});
+
+        clearTimeout(timeoutIdFetch);
+        return response;
     }
-    catch (Error)
+    catch (exception)
     {
+        if (exception instanceof DOMException) //This means the time out was reached.
+        {
+            throw "The request was too long to complete.";
+        }
+
         throw "Could not connect to the server";
     }
 };
@@ -115,7 +128,7 @@ IpTracker.prototype.checkIPAndPerformRequest = async function (ipAddress = '')
     finally
     {
         this.hideSpinner();
-    }
+}
 };
 
 /**
